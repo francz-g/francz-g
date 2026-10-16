@@ -172,20 +172,30 @@ def main():
         vf.append(f"lut3d=file={look['lut']}:interp=tetrahedral")
     if look.get('grain', 0) > 0:
         vf.append(f"noise=c0s={look['grain']}:c0f=t+u")
-    vf.append('format=yuv420p')
     cmd = ['ffmpeg', '-nostdin', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(fps), '-i', '-']
+    ov = look.get('overlay')                       # secuencia PNG RGBA (logo y cierre) que va DESPUÉS del LUT
+    if ov:
+        cmd += ['-framerate', str(fps), '-i', os.path.join(ov['dir'], 'logo_%04d.png')]
     mus = edl.get('music')
-    if mus and not nomusic:
+    use_music = bool(mus) and not nomusic
+    if use_music:
         cmd += ['-ss', f"{mus['start']:.3f}", '-i', mus['file']]
-    cmd += ['-vf', ','.join(vf), '-c:v', 'libx264', '-profile:v', 'high', '-preset', 'veryfast' if preview else 'slow',
+    base = ','.join(vf) if vf else 'null'
+    if ov:
+        scale = '' if not preview else f",scale={W}:{H}"
+        fc = f"[0:v]{base}[b];[1:v]format=rgba{scale}[o];[b][o]overlay=0:0:format=auto:eof_action=pass,format=yuv420p[v]"
+    else:
+        fc = f"[0:v]{base},format=yuv420p[v]"
+    cmd += ['-filter_complex', fc, '-map', '[v]',
+            '-c:v', 'libx264', '-profile:v', 'high', '-preset', 'veryfast' if preview else 'slow',
             '-crf', '22' if preview else '16', '-maxrate', '20M', '-bufsize', '40M', '-g', str(int(fps * 2)),
             '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv']
-    if mus and not nomusic:
+    if use_music:
         dur = total / fps
         fo = mus.get('fade_out', 1.5)
         af = (f"atrim=0:{dur:.3f},afade=t=in:st=0:d={mus.get('fade_in', 0.05)},afade=t=out:st={dur - fo:.3f}:d={fo},"
               f"volume={mus.get('gain_db', 0)}dB,aresample=48000")  # ganancia fija medida (-14 LUFS), sin compresión
-        cmd += ['-af', af, '-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-ac', '2', '-shortest', '-map', '0:v', '-map', '1:a']
+        cmd += ['-map', f"{2 if ov else 1}:a", '-af', af, '-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-ac', '2', '-shortest']
     cmd += ['-movflags', '+faststart', out]
     enc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     readers = {}

@@ -9,13 +9,8 @@
  "look": {
   "lut": "${REEL_DIR}/work/boutique.cube",
   "vignette": 0.14,
-  "end_fade": {
-   "color": [
-    52,
-    33,
-    22
-   ],
-   "frames": 30
+  "overlay": {
+   "dir": "${REEL_DIR}/work/logo_overlay"
   }
  },
  "music": {
@@ -379,14 +374,14 @@
   {
    "clip": "IMG_6219",
    "in": 17.0,
-   "dur": 3.58,
+   "dur": 3.98,
    "speed": 0.5,
    "cam": {
     "stab": 2.0,
-    "follow": 0.5,
-    "head": 0.07,
+    "follow": 0.3,
+    "head": null,
     "zoom": 1.0,
-    "push": 0.05
+    "ycenter": 0.46
    },
    "trans_in": {
     "type": "blur",

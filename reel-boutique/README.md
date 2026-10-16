@@ -75,6 +75,23 @@ Alternativas recomendadas (misma licencia):
 Ojo: las cuentas de empresa de Instagram solo pueden añadir audios de la *Meta Sound Collection*
 (libres de derechos). Las bibliotecas de pago (Epidemic Sound, Artlist) incluyen licencia comercial para redes.
 
+## Cierre con logo
+
+`scripts/logo.py` recrea tipográficamente el logo de la tienda:
+- **Tipografías:** Bodoni Moda para "S&P" (con el "&" dorado y su terminal de bola) y Jost para "BOUTIQUE", ambas con licencia OFL de Google Fonts.
+- **Fuentes:** van en `reel-boutique/fonts/` y no se incluyen en el repositorio.
+- **Colores:** marfil `#FCFBF7` y dorado champán `#DDC491`.
+
+`scripts/logo_anim.py` genera la animación como capa PNG con transparencia, que se compone **después** del LUT para conservar los colores exactos de marca:
+1. El logo aparece arriba sobre la última toma: S y P con enfoque suave, el "&" dorado, la línea que se dibuja y BOUTIQUE letra a letra.
+2. Un brillo dorado recorre el "&".
+3. La imagen funde a chocolate y el logo baja al centro como cierre.
+
+## Opciones de música
+
+`scripts/music_scan.py` analiza candidatas: tempo, calidez del sonido, intro y mejor tramo.
+`scripts/make_muestrario.py` arma un video muestrario: cada opción suena 12 s sobre el Reel, con su nombre en pantalla.
+
 ## Cómo reproducir
 
 Requisitos: ffmpeg (con `zscale`/libzimg y `libx264`) y Python 3 con `opencv-python-headless`, `mediapipe`,
