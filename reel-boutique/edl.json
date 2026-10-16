@@ -20,6 +20,13 @@
   "fade_out": 0.3,
   "gain_db": -6.3
  },
+ "sfx": [
+  {
+   "file": "${REEL_DIR}/sfx/s867.mp3",
+   "t": 0.05,
+   "gain_db": -2.0
+  }
+ ],
  "shots": [
   {
    "clip": "IMG_6219",

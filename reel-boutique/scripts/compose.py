@@ -178,24 +178,41 @@ def main():
         cmd += ['-framerate', str(fps), '-i', os.path.join(ov['dir'], 'logo_%04d.png')]
     mus = edl.get('music')
     use_music = bool(mus) and not nomusic
+    nin = 2 if ov else 1                           # índice del siguiente input
     if use_music:
-        cmd += ['-ss', f"{mus['start']:.3f}", '-i', mus['file']]
+        cmd += ['-ss', f"{mus['start']:.3f}", '-i', mus['file']]; mus_idx = nin; nin += 1
+    sfx = edl.get('sfx', [])                       # efectos de sonido puntuales (p. ej. brillo del título)
+    sfx_idx = []
+    for e in sfx:
+        cmd += ['-i', e['file']]; sfx_idx.append(nin); nin += 1
     base = ','.join(vf) if vf else 'null'
     if ov:
         scale = '' if not preview else f",scale={W}:{H}"
         fc = f"[0:v]{base}[b];[1:v]format=rgba{scale}[o];[b][o]overlay=0:0:format=auto:eof_action=pass,format=yuv420p[v]"
     else:
         fc = f"[0:v]{base},format=yuv420p[v]"
+    dur = total / fps
+    alabels = []
+    if use_music:
+        fo = mus.get('fade_out', 1.5)
+        fc += (f";[{mus_idx}:a]atrim=0:{dur:.3f},afade=t=in:st=0:d={mus.get('fade_in', 0.05)},afade=t=out:st={dur - fo:.3f}:d={fo},"
+               f"volume={mus.get('gain_db', 0)}dB,aresample=48000,aformat=channel_layouts=stereo[mus]")  # ganancia fija medida (-14 LUFS)
+        alabels.append('[mus]')
+    for k, (e, idx) in enumerate(zip(sfx, sfx_idx)):
+        ms = int(round(e.get('t', 0) * 1000))
+        fc += f";[{idx}:a]aresample=48000,aformat=channel_layouts=stereo,adelay={ms}|{ms},volume={e.get('gain_db', 0)}dB[s{k}]"
+        alabels.append(f'[s{k}]')
+    if alabels:
+        if len(alabels) == 1:
+            fc += f";{alabels[0]}apad,atrim=0:{dur:.3f}[aout]"
+        else:
+            fc += f";{''.join(alabels)}amix=inputs={len(alabels)}:normalize=0:duration=longest,apad,atrim=0:{dur:.3f}[aout]"
     cmd += ['-filter_complex', fc, '-map', '[v]',
             '-c:v', 'libx264', '-profile:v', 'high', '-preset', 'veryfast' if preview else 'slow',
             '-crf', '22' if preview else '16', '-maxrate', '20M', '-bufsize', '40M', '-g', str(int(fps * 2)),
             '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv']
-    if use_music:
-        dur = total / fps
-        fo = mus.get('fade_out', 1.5)
-        af = (f"atrim=0:{dur:.3f},afade=t=in:st=0:d={mus.get('fade_in', 0.05)},afade=t=out:st={dur - fo:.3f}:d={fo},"
-              f"volume={mus.get('gain_db', 0)}dB,aresample=48000")  # ganancia fija medida (-14 LUFS), sin compresión
-        cmd += ['-map', f"{2 if ov else 1}:a", '-af', af, '-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-ac', '2', '-shortest']
+    if alabels:
+        cmd += ['-map', '[aout]', '-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-ac', '2']
     cmd += ['-movflags', '+faststart', out]
     enc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     readers = {}

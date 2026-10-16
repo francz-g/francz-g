@@ -59,6 +59,8 @@ for clip, tin, beats, sp, c, tr, fx in shots:
     out.append(d)
 edl = dict(fps=30, size=[1080, 1920], probe=SP + '/work/probe.json', proxy_dir=SP + '/work/proxy',
            look=dict(lut=SP + '/work/boutique.cube', vignette=0.14, overlay=dict(dir=SP + '/work/logo_overlay')),
-           music=dict(file=SP + '/work/music_bed_slowtrance.wav', start=0.0, fade_in=0.0, fade_out=0.3, gain_db=-6.3), shots=out)
+           music=dict(file=SP + '/work/music_bed_slowtrance.wav', start=0.0, fade_in=0.0, fade_out=0.3, gain_db=-6.3),
+           # brillo sonoro sincronizado con la aparición del título "outfit inspo" (Mixkit 'Fairy glitter')
+           sfx=[dict(file=SP + '/sfx/s867.mp3', t=0.05, gain_db=-2.0)], shots=out)
 json.dump(edl, open(sys.argv[1], 'w'), indent=1)
 print('planos', len(out), 'duración', round(sum(s['dur'] for s in out), 3), 's')

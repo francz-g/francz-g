@@ -85,6 +85,16 @@ No permite redistribuir la pista sola ni registrarla en sistemas de Content ID.
 2. Un brillo dorado recorre el "&".
 3. La imagen funde a chocolate y el logo baja al centro como cierre.
 
+## Título de apertura
+
+`scripts/title_anim.py` añade el título **"outfit inspo"** durante los primeros 3,4 s:
+- "outfit" en Pinyon Script dorada, que se escribe de izquierda a derecha.
+- "INSPO" en Jost marfil, letra a letra.
+- Destellos dorados de cuatro puntas.
+
+Queda dentro de la zona segura de Instagram (60–77 % del alto). Suena sincronizado con el efecto
+*Fairy glitter* de Mixkit (*Mixkit Sound Effects Free License*), que se mezcla con `compose.py` (entrada `sfx` del EDL).
+
 ## Opciones de música
 
 `scripts/music_scan.py` analiza candidatas: tempo, calidez del sonido, intro y mejor tramo.
