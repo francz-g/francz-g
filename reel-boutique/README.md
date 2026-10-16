@@ -61,8 +61,8 @@ y los tramos repetitivos o con movimientos bruscos de cámara.
 
 ## Música
 
-Pista elegida por la clienta: **"Slow Trance Morning" — Alejandro Magaña (A. M.)** (Mixkit). Es house elegante a 124 BPM.
-La elegió entre 12 opciones presentadas en un video muestrario.
+Pista elegida: **"Slow Trance Morning" — Alejandro Magaña (A. M.)** (Mixkit). Es house elegante a 124 BPM,
+escogida entre 12 opciones presentadas en un video muestrario.
 
 Edición por compases (`scripts/music_edit.py`, segmentos `28.096-68.741,107.452-111.772`):
 - El tema arranca un compás antes del cambio de frase de los 30 s. Ese cambio coincide con el paso de la cámara lenta a velocidad real.
