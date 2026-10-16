@@ -1,8 +1,8 @@
-"""Guion de montaje (EDL) del Reel: planos sincronizados a 'House 02' (123 BPM)."""
+"""Guion de montaje (EDL) del Reel: planos sincronizados a 'Slow Trance Morning' (124 BPM)."""
 import json, os, sys
 SP = os.environ.get('REEL_DIR', '.')
-B = 0.48780  # un tiempo a 123 BPM
-FINAL_DUR = 3.98  # último plano: logo + cierre (total < 45 s)
+B = 60 / 124  # un tiempo a 124 BPM
+FINAL_DUR = 4.32  # último plano: logo + cierre (total < 45 s)
 
 
 def cam(**k):
@@ -49,7 +49,7 @@ shots = [
     ('IMG_6208', 11.15, 4, 0.8, cam(), None, None),
     # Cierre: vuelve el look de la paleta de la tienda y funde a chocolate
     # encuadre con aire arriba para que el logo quede sobre la pared, como en la referencia de la tienda
-    ('IMG_6219', 17.00, None, 0.5, cam(follow=0.3, head=None, ycenter=0.46), dict(type='blur', frames=12, sigma=12), None),
+    ('IMG_6219', 16.70, None, 0.5, cam(follow=0.3, head=None, ycenter=0.46), dict(type='blur', frames=12, sigma=12), None),
 ]
 out = []
 for clip, tin, beats, sp, c, tr, fx in shots:
@@ -59,6 +59,6 @@ for clip, tin, beats, sp, c, tr, fx in shots:
     out.append(d)
 edl = dict(fps=30, size=[1080, 1920], probe=SP + '/work/probe.json', proxy_dir=SP + '/work/proxy',
            look=dict(lut=SP + '/work/boutique.cube', vignette=0.14, overlay=dict(dir=SP + '/work/logo_overlay')),
-           music=dict(file=SP + '/work/music_bed.wav', start=0.0, fade_in=0.0, fade_out=0.05, gain_db=-2.6), shots=out)
+           music=dict(file=SP + '/work/music_bed_slowtrance.wav', start=0.0, fade_in=0.0, fade_out=0.3, gain_db=-6.3), shots=out)
 json.dump(edl, open(sys.argv[1], 'w'), indent=1)
 print('planos', len(out), 'duración', round(sum(s['dur'] for s in out), 3), 's')

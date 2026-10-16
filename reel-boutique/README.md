@@ -1,6 +1,6 @@
 # Reel de moda para boutique: proyecto de edición
 
-Reel vertical para Instagram (9:16, 1080×1920, H.264, 30 fps, 44,6 s), montado a partir de 13 tomas
+Reel vertical para Instagram (9:16, 1080×1920, H.264, 30 fps, 44,95 s), montado a partir de 13 tomas
 grabadas con iPhone (4K HDR/HLG a 60 fps) de una modelo mostrando 11 looks.
 Este directorio guarda el **proceso de edición reproducible**. No incluye los videos de origen
 ni el Reel exportado, porque este repositorio es público.
@@ -19,7 +19,7 @@ ni el Reel exportado, porque este repositorio es público.
 - **Estructura:** la apertura y el cierre usan el look crema + satén chocolate (la paleta de la tienda).
   En medio aparecen los 11 looks, ordenados por color: neutros → denim → azul → bicolor →
   abrigos → leopardo → negro de noche.
-- **Ritmo:** cortes sobre el pulso de *House 02* (123 BPM), casi siempre de un compás (1,95 s).
+- **Ritmo:** cortes sobre el pulso de *Slow Trance Morning* (124 BPM), casi siempre de un compás (1,94 s).
   Hay acentos de medio compás y cámaras lentas reales (fuente a 60 fps) en giros y vuelos de falda.
 - **Estabilización:** el iPhone ya elimina la vibración rápida (unos 0,2 px).
   Lo que se corrige es el bamboleo de cámara en mano (periodos de 0,2 a 1 s), medido solo sobre el fondo,
@@ -54,26 +54,24 @@ ni el Reel exportado, porque este repositorio es público.
 | 19 | 36,10 s | Vestido negro espalda descubierta | IMG_6208 | Barrido |
 | 20 | 37,07 s | 〃 (revelación de la espalda) | IMG_6208 | Cámara lenta 0,6× |
 | 21 | 39,03 s | 〃 | IMG_6208 | 0,8× |
-| 22 | 40,97 s | Cierre: look crema + chocolate | IMG_6219 | Fundido con desenfoque, cámara lenta y fundido final a chocolate |
+| 22 | 40,63 s | Cierre: look crema + chocolate | IMG_6219 | Fundido con desenfoque, cámara lenta, logo animado y cierre en chocolate |
 
 Se descartaron los primeros ~3 s de cada toma (sala vacía antes de que la modelo salga del biombo)
 y los tramos repetitivos o con movimientos bruscos de cámara.
 
 ## Música
 
-Pista usada: **"House 02" — Lily J** (Mixkit). Es deep house elegante a 123 BPM.
-Está editada por compases: intro, cuerpo y el final natural del tema (`scripts/music_edit.py`).
-Se distribuye bajo la *Mixkit Stock Music Free License*, que permite uso comercial y en redes sociales
-sin atribución. No permite redistribuirla sola ni registrarla en sistemas de Content ID.
+Pista elegida por la clienta: **"Slow Trance Morning" — Alejandro Magaña (A. M.)** (Mixkit). Es house elegante a 124 BPM.
+La elegió entre 12 opciones presentadas en un video muestrario.
 
-Alternativas recomendadas (misma licencia):
+Edición por compases (`scripts/music_edit.py`, segmentos `28.096-68.741,107.452-111.772`):
+- El tema arranca un compás antes del cambio de frase de los 30 s. Ese cambio coincide con el paso de la cámara lenta a velocidad real.
+- La subida de energía de los 61 s del tema entra con los vestidos de noche.
+- Se empalma con el final real del tema: el golpe final suena con el destello dorado del logo y la cola acompaña el cierre.
+- Volumen fijo de −6,3 dB, medido para quedar en −14 LUFS.
 
-1. **"Lies and More Lies" — Michael Ramir C.** (disco, ~100 BPM): más retro-glam y seguro de sí mismo.
-2. **"You're like Caviar" — Michael Ramir C.** (chillout / nu-jazz, ~112 BPM): lounge lujoso y relajado.
-3. **"House 02" — Lily J**: la pista usada.
-
-Ojo: las cuentas de empresa de Instagram solo pueden añadir audios de la *Meta Sound Collection*
-(libres de derechos). Las bibliotecas de pago (Epidemic Sound, Artlist) incluyen licencia comercial para redes.
+Licencia: *Mixkit Stock Music Free License*. Permite uso comercial y en redes sin atribución.
+No permite redistribuir la pista sola ni registrarla en sistemas de Content ID.
 
 ## Cierre con logo
 
@@ -103,7 +101,7 @@ python3 scripts/probe.py   $REEL_DIR/src $REEL_DIR/work/probe.json
 scripts/make_proxies.sh     $REEL_DIR/src $REEL_DIR/work/proxy        # proxies 540 px, ya en SDR
 python3 scripts/analyze.py  <proxy.mp4> <salida.npz> 6               # pose, giros, sonrisa, temblor
 python3 scripts/make_lut.py $REEL_DIR/work/boutique.cube
-python3 scripts/music_edit.py tema.mp3 $REEL_DIR/work/music_bed.wav "5.906-46.880,101.514-105.114" 0.02 1.6
+python3 scripts/music_edit.py tema.mp3 $REEL_DIR/work/music_bed_slowtrance.wav "28.096-68.741,107.452-111.772" 0.02 0.6
 python3 scripts/build_edl.py $REEL_DIR/work/edl.json
 python3 scripts/render_shots.py $REEL_DIR/work/edl.json $REEL_DIR/work/shots   # estabiliza y reencuadra cada plano
 python3 scripts/compose.py      $REEL_DIR/work/edl.json $REEL_DIR/work/shots reel.mp4   # transiciones, LUT, música

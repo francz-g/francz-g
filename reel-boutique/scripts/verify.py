@@ -1,6 +1,6 @@
 """Verificación del Reel exportado: especificaciones, cortes vs. pulso musical y niveles."""
 import sys, json, subprocess, numpy as np, cv2
-f = sys.argv[1]; beat = 60 / 123.0
+f = sys.argv[1]; beat = 60 / float(sys.argv[2]) if len(sys.argv) > 2 else 60 / 123.0
 j = json.loads(subprocess.run(['ffprobe', '-v', 'error', '-print_format', 'json', '-show_streams', '-show_format', f],
                               capture_output=True, text=True).stdout)
 for s in j['streams']:
