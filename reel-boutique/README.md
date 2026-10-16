@@ -21,6 +21,12 @@ ni el Reel exportado, porque este repositorio es público.
   abrigos → leopardo → negro de noche.
 - **Ritmo:** cortes sobre el pulso de *House 02* (123 BPM), casi siempre de un compás (1,95 s).
   Hay acentos de medio compás y cámaras lentas reales (fuente a 60 fps) en giros y vuelos de falda.
+- **Estabilización:** el iPhone ya elimina la vibración rápida (unos 0,2 px).
+  Lo que se corrige es el bamboleo de cámara en mano (periodos de 0,2 a 1 s), medido solo sobre el fondo,
+  que baja de 3,5 a 1,9 px de media (−46 %) y hasta −70 % en las tomas más inestables.
+  Se suaviza la trayectoria con σ = 2 s (1,2 s en dos tomas) y se usa un zoom constante por plano
+  para no mostrar bordes. En el giro del kaftán se respeta el movimiento natural del operador:
+  estabilizarlo habría obligado a cortar el vuelo del vestido.
 
 ## Guion de montaje (ver `edl.json`)
 
